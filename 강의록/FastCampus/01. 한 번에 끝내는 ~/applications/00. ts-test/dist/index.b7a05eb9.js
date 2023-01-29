@@ -690,6 +690,63 @@ const Inter = {
     age: 85,
     isValid: true
 };
+//3. 타입 추론 (Inference) - 어떤 판단을 근거로 삼아 다른 판단을 이끌어 냄
+// 기본값과 반환값이 명확하지 않은 경우 타입을 지정하면되고, 이는 코드에 가독성을 제공함
+// 추론이 가능한 케이스
+// 1) 초기화된 변수
+let init = 12;
+init = "Hello"; //위에서 타입 지정을 하지 않아도 위에서 이미 추론됨 (매번 타입지정을 할 필요는 없음)
+// 2) 기본값이 설정된 매개변수 'b' + 3) 반환값이 있는 함수 'add'
+function example(a, b = 2) {
+    return a + b;
+}
+//4. 타입 단언 (Assertions) - 딱 잘라 말함
+//키워드(as)나 Non-null 단언 연산자 (!) 사용
+//잘못사용될 수 있어 남발하기보다는, 타입 가드 등을 사용하는 것이 좋을 듯
+//1-1) as
+const el = document.querySelector("body");
+el.textContent = "Hello world?!";
+//ERR: Object is possibly 'null' , el : HTMLBodyElement | null
+//-> querySelector의 특징상 HTML는 body 태그가 보통 있지만, TS는 script 코드에서만 추론, 타입 확인을 해서
+//HTML에 body가 있는지 확인 불가 -> 이런 상황에 개발자가 body 태그가 있다고 assertion 한다
+//1-2) ! : null이나 undefined가 아닐 경우를 명시할 때'만' 사용
+const el2 = document.querySelector("body");
+el2.textContent = "Hello world?!";
+//1-3) 다만 body태그가 아니라 다른 클래스의 타입을 단언하는 것은 굳이 필요 x -> 잘못된 코드가 될 수 있다
+const el3 = document.querySelector(".title");
+el3.textContent = "Hello";
+//예를 들어, 여기서는 해당 클래스가 없음에도 TS에러가 발생하지 않는다 (TS가 잡아내지 못하는 부분을 단언했으므로)
+//이런 부분은 JS로 잡아낼 수 있게끔 코드를 수정한다
+//1-4) Type guard:타입 가드 ->단언을 하지 않고도 el이 확정적일 때만 코드를 실행하는 방법
+const el4 = document.querySelector(".title");
+if (el4) el4.textContent = "Hello";
+//2) 잘못된 코드임 - TypeError가 발생하므로
+function getNumber(x) {
+    return Number(x.toFixed(2));
+}
+getNumber(3.14);
+getNumber(null); //ERR는 발생하지 않지만, console.log에서 확인하면
+//TypeError: Cannot read properties of null (reading 'toFixed') 에러 발생
+//즉, 들어오는 것은 가능한데 메서드 상에서 타입에러 발생
+//2-1) 수정완료
+function getNumber2(x) {
+    if (x) return Number(x.toFixed(2));
+}
+//3)
+function getValue(x, isNumber) {
+    if (isNumber) return Number(x.toFixed(2)); //이 경우 ! 사용 x
+    return x.toUpperCase(); //이 경우 ! 사용 x
+}
+getValue("hello world", false); //'HELLO WORLD'
+getValue(3.1415, true); //3.14
+//5. 할당 단언 - !: TS에게 이미 할당이 되었다고 단언해서 에러출력 못하게
+let num3;
+console.log(num3); //number type이어야 하는데 콘솔로그에는 undefined -> TS에러: variable.. is used before being assigned
+let num4;
+console.log(num4) //undefined로 나오지만 TS에러는 없음
+;
+num = 123 //위가 먼저 실행
+;
 
 },{}]},["cnpQZ","jeorp"], "jeorp", "parcelRequire46e5")
 
