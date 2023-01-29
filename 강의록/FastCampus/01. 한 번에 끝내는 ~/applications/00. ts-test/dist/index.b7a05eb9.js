@@ -558,9 +558,9 @@ function hmrAccept(bundle, id) {
 
 },{}],"jeorp":[function(require,module,exports) {
 //1. 기본용법 - 타입 정의
-let hello = "false";
-hello = "123";
-console.log(hello);
+let variable = "false";
+variable = "123";
+console.log(variable);
 //2. 타입 종류
 //string
 let str; //일단 지금은 undefined라도, 추후에는 string이 부여되어야 함
@@ -627,15 +627,68 @@ const userB = {
 const add = function(x, y) {
     return x + y;
 };
-const a = add(1, 2);
-const hello2 = function() {
+const variableA = add(1, 2);
+const variableB = function() {
     //원래 별도의 return이 없으면 undefined를 반환하지만, TS에서는 void라는 데이터 타입이 나온다.
     console.log("Hello World");
 };
-const h = hello2(); //즉, 함수 실행히 나오는 데이터를 변수에 할당할 필요가 없으면 void 사용
+const variableC = variableB(); //즉, 함수 실행히 나오는 데이터를 변수에 할당할 필요가 없으면 void 사용
 //매개변수에서 바로 할 수 있다.
 const add2 = function(x, y) {
     return x + y;
+};
+//any : 엄격한 타입관리로 인해 에러발생을 줄이기 위해 되도록 사용하지 않는다
+let variableD = "Hello world";
+variableD = 123;
+variableD = false;
+variableD = null;
+variableD = {};
+variableD = [];
+variableD = function() {};
+//unknown : 일단 알수없음으로 표시 -> 많이 사용하는 편 (정확한 타입을 알 수 없는 경우)
+const variableAny = 123;
+const variableUnknown = 123;
+const any = variableAny;
+const boo = variableAny; //variableUnknown을 할당하면 에러발생
+const numb = variableAny; //variableUnknown을 할당하면 에러발생
+const arra = variableAny; //variableUnknown을 할당하면 에러발생
+const obje = variableAny; //variableUnknown을 할당하면 에러발생
+//tuple (..'개'의 요소로 된 집합 -> 배열 데이터의 개수까지 명시하는 경우 사용)
+const tuple = [
+    "a",
+    1,
+    false
+];
+const users = [
+    [
+        1,
+        "A",
+        true
+    ],
+    [
+        2,
+        "B",
+        false
+    ]
+];
+//void : return 값이 없을 때 반환타입이 undefined가 아니라 'void'
+function hello(msg) {
+    //타입에 undefined 할당시 오류 발생
+    console.log(`Hello ${msg}`);
+}
+const hi = hello("world");
+//never : 절대 발생하지 않을 값 -> 직접 사용할 일은 거의 없다 : 타입 지정이 잘못되지 않았는지 체크하기
+const nev = [];
+nev.push(3); //에러발생
+//union : vertical bar를 사용 : 동시에 여러 개의 타입 지정
+let union2;
+union2 = "Hello";
+union2 = 123;
+union2 = false;
+const Inter = {
+    name: "A",
+    age: 85,
+    isValid: true
 };
 
 },{}]},["cnpQZ","jeorp"], "jeorp", "parcelRequire46e5")
