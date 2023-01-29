@@ -222,5 +222,24 @@ let num3: number;
 console.log(num3); //number type이어야 하는데 콘솔로그에는 undefined -> TS에러: variable.. is used before being assigned
 
 let num4!: number;
-console.log(num4) //undefined로 나오지만 TS에러는 없음
-num=123 //위가 먼저 실행
+console.log(num4); //undefined로 나오지만 TS에러는 없음
+num = 123; //위가 먼저 실행
+
+//6. 타입 가드 Guards
+//1)
+function logText(el: Element) {
+  console.log(el.textContent); //타입 가드를 사용해서 el.textContent에서 타입에러가 발생하지 않도록 한다.
+}
+
+const h1El = document.querySelector('h1');
+if (h1El) {
+  //단언 자체가 잘못되어서 TS에러는 발생하지 않지만 코드 작동에서는 타입에러가 발생할 수 있다
+  logText(h1El);
+}
+
+//or
+if (h1El instanceof HTMLHeadingElement) {
+  logText(h1El);
+}
+
+//2) 4.단언의 //3번 케이스
